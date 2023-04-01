@@ -7,16 +7,29 @@ package app6;
  */
 public class Terminal {
 
-
-// Constantes et attributs
+  // Constantes et attributs
+  private final String chaine;
+  private final TerminalType type;
 //  ....
 
 
-/** Un ou deux constructeurs (ou plus, si vous voulez)
-  *   pour l'initalisation d'attributs 
- */	
-  public Terminal( ) {   // arguments possibles
-     //
+  /** Un ou deux constructeurs (ou plus, si vous voulez)
+   *   pour l'initalisation d'attributs
+   */
+  public Terminal(String chaine, TerminalType type) {
+    this.chaine = chaine;
+    this.type = type;
   }
+
+  public String getChaine() {
+    return chaine;
+  }
+
+  @Override
+  public String toString() {
+    return "Token: " + chaine + "\tType: " + type;
+  }
+
+
 
 }

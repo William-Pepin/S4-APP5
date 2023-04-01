@@ -27,7 +27,7 @@ public class NoeudAST extends ElemAST {
    */
   public String LectAST( ) {
      //
-    return 0;
+    return "";
   }
 
 }
