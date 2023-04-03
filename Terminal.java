@@ -27,7 +27,7 @@ public class Terminal {
 
   @Override
   public String toString() {
-    return "Token: " + chaine + "\tType: " + type;
+    return "[ Token: " + chaine + ", Type: " + type + " ]";
   }
 
   public TerminalType getType()

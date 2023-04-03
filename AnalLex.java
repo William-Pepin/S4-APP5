@@ -144,14 +144,14 @@ public class AnalLex {
       true s'il reste encore au moins un terminal qui n'a pas ete retourne 
  */
   public boolean resteTerminal( ) {
-    return !(pointer == chaine.length() - 1);
+    return !(pointer == chaine.length());
   }
   
   
 /** prochainTerminal() retourne le prochain terminal
       Cette methode est une implementation d'un AEF
  */  
-  public Terminal prochainTerminal( ) {
+  public Terminal prochainTerminal( ) throws AnalLexException {
     StringBuilder terminal = new StringBuilder();
     TerminalType type = null;
     state = AnalLexState.INIT;
@@ -176,6 +176,9 @@ public class AnalLex {
               state = AnalLexState.VAR;
               terminal.append(current);
             } else {
+              if(lowerCase.contains(current)){
+                ErreurLex("La variable à la position " + pointer + " débute par une minuscule. Remplacer " + current + " par " + Character.toUpperCase(current) + ".");
+              }
               ErreurLex("Le caractère " + current + " n'est pas un caractère connu du compilateur.");
             }
           }
@@ -202,8 +205,12 @@ public class AnalLex {
             if (upperCase.contains(current) || lowerCase.contains(current)) {
               state = AnalLexState.VAR;
               terminal.append(current);
-            } else
-              ErreurLex("Il ne peut y avoir deux fois le caractère " + current + " de suite.");
+            } else {
+              if (current == '_') {
+                ErreurLex("Caractère invalide à la position " + pointer + ", la variable contient deux tirets bas de suite.");
+              }
+              ErreurLex("Caractère invalide à la position " + pointer + ", la variable précédente termine par \"_\", ou l'élément " + current + " ne fait pas partie des caractères connu du compilateur.");
+            }
           }
           default -> {}
         }
@@ -228,13 +235,13 @@ public class AnalLex {
  
 /** ErreurLex() envoie un message d'erreur lexicale
  */ 
-  public void ErreurLex(String s) {
-    System.out.println(s);
+  public void ErreurLex(String s) throws AnalLexException {
+    throw new AnalLexException(s);
   }
 
   
   //Methode principale a lancer pour tester l'analyseur lexical
-  public static void main(String[] args) {
+  public static void main(String[] args) throws AnalLexException {
     String toWrite = "";
     System.out.println("Debut d'analyse lexicale");
     if (args.length == 0){
