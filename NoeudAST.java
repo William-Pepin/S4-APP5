@@ -1,6 +1,8 @@
 package app6;
 
-/** @author Ahmed Khoumsi */
+/**
+ * @author Ahmed Khoumsi
+ */
 
 /** Classe representant une feuille d'AST
  */
@@ -14,20 +16,29 @@ public class NoeudAST extends ElemAST {
 
   /** Constructeur pour l'initialisation d'attributs
    */
-  public NoeudAST(Terminal terminal ) throws Exception { // avec arguments
-    if(terminal.getType() != TerminalType.OPERATEUR ||
-       terminal.getType() != TerminalType.PARENTHESE) {
+  public NoeudAST(Terminal terminal, ElemAST pG, ElemAST pD) throws Exception { // avec arguments
+    if (terminal.getType() != TerminalType.OPERATEUR ||
+        terminal.getType() != TerminalType.PARENTHESE) {
       throw new Exception("a changer eventuellement...");
     }
     this.terminal = terminal;
+    this.gauche = pG;
+    this.droite = pD;
   }
 
- 
+
   /** Evaluation de noeud d'AST
    */
-  public int EvalAST( ) {
-     //
-    return 0;
+  public int EvalAST() throws AnalSyntException {
+    int result = 0;
+    switch (this.terminal.getChaine()) {
+      case "+" -> result = gauche.EvalAST() + droite.EvalAST();
+      case "-" -> result = gauche.EvalAST() - droite.EvalAST();
+      case "*" -> result = gauche.EvalAST() * droite.EvalAST();
+      case "/" -> result = gauche.EvalAST() / droite.EvalAST();
+      default -> throw new AnalSyntException("L'opération n'est pas défini dans la liste des opérateurs ( + - * / )");
+    }
+    return result;
   }
 
   public TerminalType getType() {
@@ -37,7 +48,7 @@ public class NoeudAST extends ElemAST {
 
   /** Lecture de noeud d'AST
    */
-  public String LectAST( ) {
+  public String LectAST() {
     return getGauche().LectAST() + terminal.toString() + getDroite().LectAST();
   }
 

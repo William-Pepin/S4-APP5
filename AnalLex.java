@@ -1,12 +1,16 @@
 package app6;
 
-/** @author Ahmed Khoumsi, William Pépin, Gabriel Vachon, Matthieu Daoust */
+/**
+ * @author Ahmed Khoumsi, William Pépin, Gabriel Vachon, Matthieu Daoust
+ */
+
 import app6.AnalLexState;
 
 import java.util.ArrayList;
 
 
-/** Cette classe effectue l'analyse lexicale
+/**
+ * Cette classe effectue l'analyse lexicale
  */
 public class AnalLex {
 
@@ -25,8 +29,9 @@ public class AnalLex {
 
   private ArrayList<Character> transitionChars;
 
-/** Constructeur pour l'initialisation d'attribut(s)
- */
+  /**
+   * Constructeur pour l'initialisation d'attribut(s)
+   */
   public AnalLex(String chaine) {         // arguments possibles
     operators = new ArrayList<>();        // ensemble des opérateurs +-*/
     parentheses = new ArrayList<>();      // ensemble des parenthèses ()
@@ -46,8 +51,7 @@ public class AnalLex {
   /**
    * Méthode qui permet d'initialiser l'alphabet de l'analyseur lexical
    */
-  public void initAlphabet()
-  {
+  public void initAlphabet() {
     // operators
     operators.add('+');
     operators.add('-');
@@ -139,26 +143,28 @@ public class AnalLex {
   }
 
 
-/** resteTerminal() retourne :
-      false  si tous les terminaux de l'expression arithmetique ont ete retournes
-      true s'il reste encore au moins un terminal qui n'a pas ete retourne 
- */
-  public boolean resteTerminal( ) {
+  /**
+   * resteTerminal() retourne :
+   * false  si tous les terminaux de l'expression arithmetique ont ete retournes
+   * true s'il reste encore au moins un terminal qui n'a pas ete retourne
+   */
+  public boolean resteTerminal() {
     return !(pointer == chaine.length());
   }
-  
-  
-/** prochainTerminal() retourne le prochain terminal
-      Cette methode est une implementation d'un AEF
- */  
-  public Terminal prochainTerminal( ) throws AnalLexException {
+
+
+  /**
+   * prochainTerminal() retourne le prochain terminal
+   * Cette methode est une implementation d'un AEF
+   */
+  public Terminal prochainTerminal() throws AnalLexException {
     StringBuilder terminal = new StringBuilder();
     TerminalType type = null;
     state = AnalLexState.INIT;
     char current = 0;
     while (resteTerminal()) {
       current = chaine.charAt(pointer);
-      if(!transitionChars.contains(current)) {
+      if (!transitionChars.contains(current)) {
         switch (state) {
 
           // état INIT
@@ -176,12 +182,14 @@ public class AnalLex {
               state = AnalLexState.VAR;
               terminal.append(current);
             } else {
-              if(lowerCase.contains(current)){
+              if (lowerCase.contains(current)) {
                 ErreurLex("La variable à la position " + pointer + " débute par une minuscule. Remplacer " + current + " par " + Character.toUpperCase(current) + ".");
               }
               ErreurLex("Le caractère " + current + " n'est pas un caractère connu du compilateur.");
             }
           }
+
+          // état NUMBER
           case NUMBER -> {
             if (nombres.contains(current)) {
               terminal.append(current);
@@ -190,6 +198,8 @@ public class AnalLex {
             }
 
           }
+
+          // état VAR
           case VAR -> {
             if (upperCase.contains(current) || lowerCase.contains(current)) {
               state = AnalLexState.VAR;
@@ -201,18 +211,23 @@ public class AnalLex {
               return EtatFiniRetour(terminal.toString(), TerminalType.VARIABLE);
             }
           }
+
+          // état VAR_ER
           case VAR_ER -> {
             if (upperCase.contains(current) || lowerCase.contains(current)) {
               state = AnalLexState.VAR;
               terminal.append(current);
             } else {
               if (current == '_') {
-                ErreurLex("Caractère invalide à la position " + pointer + ", la variable contient deux tirets bas de suite.");
+                ErreurLex("Caractère invalide à la position " + pointer + ", la variable contient deux tirets bas de " +
+                    "suite.");
               }
-              ErreurLex("Caractère invalide à la position " + pointer + ", la variable précédente termine par \"_\", ou l'élément " + current + " ne fait pas partie des caractères connu du compilateur.");
+              ErreurLex("Caractère invalide à la position " + pointer + ", la variable précédente termine par \"_\", " +
+                  "ou l'élément " + current + " ne fait pas partie des caractères connu du compilateur.");
             }
           }
-          default -> {}
+          default -> {
+          }
         }
       }
       pointer++;
@@ -220,34 +235,45 @@ public class AnalLex {
     return new Terminal(terminal.toString(), type);
   }
 
-  public Terminal EtatFiniRetour(String terminal, TerminalType type)
-  {
+  /**
+   * Méthode qui défini le comportement lorsque l'automate effectue un retour dans un état de fin
+   *
+   * @param terminal Chaine trouvé par l'analyseur
+   * @param type     Type du terminal trouvé par l'analyser
+   * @return le terminal trouvé
+   */
+  public Terminal EtatFiniRetour(String terminal, TerminalType type) {
     return new Terminal(terminal, type);
   }
 
-  public Terminal EtatNonFiniRetour(String terminal, TerminalType type)
-  {
+  /**
+   * Méthode qui défini le comportement lorsque l'automate effectue un retour dans un état qui n'est pas un état de fin
+   *
+   * @param terminal Chaine trouvé par l'analyseur
+   * @param type     Type du terminal trouvé par l'analyser
+   * @return le terminal trouvé
+   */
+  public Terminal EtatNonFiniRetour(String terminal, TerminalType type) {
     pointer++;
     return new Terminal(terminal, type);
   }
 
-
- 
-/** ErreurLex() envoie un message d'erreur lexicale
- */ 
+  /**
+   * ErreurLex() envoie un message d'erreur lexicale
+   */
   public void ErreurLex(String s) throws AnalLexException {
     throw new AnalLexException(s);
   }
 
-  
+
   //Methode principale a lancer pour tester l'analyseur lexical
   public static void main(String[] args) throws AnalLexException {
     String toWrite = "";
     System.out.println("Debut d'analyse lexicale");
-    if (args.length == 0){
-    args = new String [2];
-            args[0] = "ExpArith.txt";
-            args[1] = "ResultatLexical.txt";
+    if (args.length == 0) {
+      args = new String[2];
+      args[0] = "ExpArith.txt";
+      args[1] = "ResultatLexical.txt";
     }
     Reader r = new Reader(args[0]);
 
@@ -255,12 +281,12 @@ public class AnalLex {
 
     // Execution de l'analyseur lexical
     Terminal t = null;
-    while(lexical.resteTerminal()){
+    while (lexical.resteTerminal()) {
       t = lexical.prochainTerminal();
-      toWrite += t.getChaine() + "\n" ;  // toWrite contient le resultat
+      toWrite += t.getChaine() + "\n";  // toWrite contient le resultat
     }           //    d'analyse lexicale
     System.out.println(toWrite);   // Ecriture de toWrite sur la console
-    Writer w = new Writer(args[1],toWrite); // Ecriture de toWrite dans fichier args[1]
+    Writer w = new Writer(args[1], toWrite); // Ecriture de toWrite dans fichier args[1]
     System.out.println("Fin d'analyse lexicale");
   }
 }

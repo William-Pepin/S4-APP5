@@ -1,15 +1,17 @@
 package app6;
 
-/** @author Ahmed Khoumsi */
+/**
+ * @author Ahmed Khoumsi
+ */
 
 /** Classe Abstraite dont heriteront les classes FeuilleAST et NoeudAST
  */
 public abstract class ElemAST {
 
-  
+
   /** Evaluation d'AST
    */
-  public abstract int EvalAST();
+  public abstract int EvalAST() throws AnalSyntException;
 
 
   /** Lecture d'AST
@@ -17,10 +19,10 @@ public abstract class ElemAST {
   public abstract String LectAST();
 
 
-/** ErreurEvalAST() envoie un message d'erreur lors de la construction d'AST
- */  
+  /** ErreurEvalAST() envoie un message d'erreur lors de la construction d'AST
+   */
   public void ErreurEvalAST(String s) throws Exception {
-    throw new Exception("A changer eventuellement: " + s );
+    throw new Exception("A changer eventuellement: " + s);
   }
 
 }
