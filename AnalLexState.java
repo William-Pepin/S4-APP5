@@ -4,5 +4,5 @@ public enum AnalLexState {
   INIT,
   NUMBER,
   VAR,
-  VAR_ERR
+  VAR_ER
 }

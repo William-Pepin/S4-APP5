@@ -154,53 +154,58 @@ public class AnalLex {
   public Terminal prochainTerminal( ) {
     StringBuilder terminal = new StringBuilder();
     TerminalType type = null;
-    char current = chaine.charAt(pointer);
-
+    state = AnalLexState.INIT;
+    char current = 0;
     while (resteTerminal()) {
+      current = chaine.charAt(pointer);
+      if(!transitionChars.contains(current)) {
+        switch (state) {
 
-      switch (state){
+          // état INIT
+          case INIT -> {
+            if (operators.contains(current))
+              return EtatNonFiniRetour(String.valueOf(current), TerminalType.OPERATEUR);
 
-        // état INIT
-        case INIT -> {
-          if(operators.contains(current))
-            return EtatNonFiniRetour(String.valueOf(current),TerminalType.OPERATEUR);
+            else if (parentheses.contains(current))
+              return EtatNonFiniRetour(String.valueOf(current), TerminalType.PARENTHESE);
 
-          else if(parentheses.contains(current))
-            return EtatNonFiniRetour(String.valueOf(current),TerminalType.PARENTHESE);
-
-          else if(nombres.contains(current)){
-            state = AnalLexState.NUMBER; // prochain état
-            terminal.append(current);
+            else if (nombres.contains(current)) {
+              state = AnalLexState.NUMBER; // prochain état
+              terminal.append(current);
+            } else if (upperCase.contains(current)) {
+              state = AnalLexState.VAR;
+              terminal.append(current);
+            } else {
+              ErreurLex("Le caractère " + current + " n'est pas un caractère connu du compilateur.");
+            }
           }
+          case NUMBER -> {
+            if (nombres.contains(current)) {
+              terminal.append(current);
+            } else {
+              return EtatFiniRetour(terminal.toString(), TerminalType.NOMBRE);
+            }
 
-          else if(upperCase.contains(current)){
-            state = AnalLexState.VAR;
-            terminal.append(current);
           }
-
-          else {
-            ErreurLex("Le caractère " + current + " n'est pas un caractère connu du compilateur.");
+          case VAR -> {
+            if (upperCase.contains(current) || lowerCase.contains(current)) {
+              state = AnalLexState.VAR;
+              terminal.append(current);
+            } else if (current == '_') {
+              state = AnalLexState.VAR_ER;
+              terminal.append(current);
+            } else {
+              return EtatFiniRetour(terminal.toString(), TerminalType.VARIABLE);
+            }
           }
-
-        }
-        case NUMBER -> {
-          if(nombres.contains(current)){
-            terminal.append(current);
+          case VAR_ER -> {
+            if (upperCase.contains(current) || lowerCase.contains(current)) {
+              state = AnalLexState.VAR;
+              terminal.append(current);
+            } else
+              ErreurLex("Il ne peut y avoir deux fois le caractère " + current + " de suite.");
           }
-
-          else {
-            return EtatFiniRetour(terminal.toString(), TerminalType.NOMBRE);
-          }
-
-        }
-        case VAR -> {
-
-        }
-        case VAR_ERR -> {
-
-        }
-        default -> {
-
+          default -> {}
         }
       }
       pointer++;
@@ -210,12 +215,12 @@ public class AnalLex {
 
   public Terminal EtatFiniRetour(String terminal, TerminalType type)
   {
-    pointer--;
     return new Terminal(terminal, type);
   }
 
   public Terminal EtatNonFiniRetour(String terminal, TerminalType type)
   {
+    pointer++;
     return new Terminal(terminal, type);
   }
 
@@ -224,7 +229,7 @@ public class AnalLex {
 /** ErreurLex() envoie un message d'erreur lexicale
  */ 
   public void ErreurLex(String s) {
-
+    System.out.println(s);
   }
 
   
