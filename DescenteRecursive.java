@@ -2,18 +2,27 @@ package app6;
 
 /** @author Ahmed Khoumsi */
 
+import java.util.ArrayList;
+
 /** Cette classe effectue l'analyse syntaxique
  */
 public class DescenteRecursive {
 
   // Attributs
+  private static ArrayList<Terminal> tokens; // unités lexicales
+  private String[] stringsToAnalyze;
+  private int pointer;
+  private Terminal current;
 
 /** Constructeur de DescenteRecursive :
       - recoit en argument le nom du fichier contenant l'expression a analyser
       - pour l'initalisation d'attribut(s)
  */
 public DescenteRecursive(String in) {
-    //
+  Reader r = new Reader(in);
+  String chaine  = r.toString().replaceAll("\\ \\t","");
+  stringsToAnalyze = chaine.split("\\n");
+  pointer = 0;
 }
 
 
@@ -34,9 +43,8 @@ public ElemAST AnalSynt( ) {
 
 /** ErreurSynt() envoie un message d'erreur syntaxique
  */
-public void ErreurSynt(String s)
-{
-    //
+public void ErreurSynt(String s) throws Exception {
+    throw new Exception("gros malaise.... erreur anal synth.... " + s);
 }
 
 

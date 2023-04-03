@@ -30,6 +30,11 @@ public class Terminal {
     return "Token: " + chaine + "\tType: " + type;
   }
 
+  public TerminalType getType()
+  {
+    return type;
+  }
+
 
 
 }
