@@ -19,10 +19,13 @@ public abstract class ElemAST {
   public abstract String LectAST();
 
 
+  /** PostFix d'AST
+   */
+  public abstract String PostFix();
+
   /** ErreurEvalAST() envoie un message d'erreur lors de la construction d'AST
    */
   public void ErreurEvalAST(String s) throws Exception {
     throw new Exception("A changer eventuellement: " + s);
   }
-
 }

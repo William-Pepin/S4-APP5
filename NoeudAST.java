@@ -49,7 +49,13 @@ public class NoeudAST extends ElemAST {
   /** Lecture de noeud d'AST
    */
   public String LectAST() {
-    return getGauche().LectAST() + terminal.toString() + getDroite().LectAST();
+    return "( " + getGauche().LectAST() + terminal.getChaine() + getDroite().LectAST() + " )";
+  }
+
+  /** Lecture PostFix de noeud d'AST
+   */
+  public String PostFix() {
+    return  getGauche().PostFix() + getDroite().PostFix() + terminal.getChaine();
   }
 
   public ElemAST getDroite() {

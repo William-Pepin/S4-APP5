@@ -39,4 +39,9 @@ public class FeuilleAST extends ElemAST {
   public String LectAST() {
     return terminal.toString();
   }
+
+  @Override
+  public String PostFix() {
+    return terminal.getChaine();
+  }
 }

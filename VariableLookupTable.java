@@ -8,4 +8,5 @@ import java.util.HashMap;
  */
 public class VariableLookupTable {
   public static final HashMap<String, Integer> lut = new HashMap<String, Integer>();
+
 }
