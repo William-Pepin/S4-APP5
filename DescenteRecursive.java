@@ -29,6 +29,11 @@ public class DescenteRecursive {
     tokens = new ArrayList<Terminal>();
   }
 
+  /**
+   * Constructeur de DescenteRecursive :
+   * - recoit en argument le nom du fichier contenant l'expression a analyser
+   * - ne sert qu'à passer directement à un string au lieu d'un fichier texte
+   */
   public DescenteRecursive(String chaine, boolean ce_bool_sert_a_rien) {
     this.chaine = chaine;
     pointer = 0;
@@ -44,10 +49,16 @@ public class DescenteRecursive {
     while (analLex.resteTerminal()) {
       tokens.add(analLex.prochainTerminal());
     }
-    tokens.add(new Terminal("$",TerminalType.END));
+    tokens.add(new Terminal("$", TerminalType.END));
     return E();
   }
 
+  /**
+   * Fonction de l'élément E, permet de retourner T | T + E | T - E
+   *
+   * @return Un élément de l'arbre
+   * @throws AnalSyntException
+   */
   public ElemAST E() throws AnalSyntException {
     ElemAST n1 = T();
     Terminal token = tokens.get(pointer);
@@ -59,6 +70,12 @@ public class DescenteRecursive {
     return n1;
   }
 
+  /**
+   * Fonction de l'élément T, permet de retourner F | F + T | F - T
+   *
+   * @return Un élément de l'arbre
+   * @throws AnalSyntException
+   */
   public ElemAST T() throws AnalSyntException {
     ElemAST n1 = F();
     Terminal token = tokens.get(pointer);
@@ -74,7 +91,12 @@ public class DescenteRecursive {
     return n1;
   }
 
-
+  /**
+   * Fonction de l'élément F, permet de retourner (E) | id | number
+   *
+   * @return Un élément de l'arbre
+   * @throws AnalSyntException
+   */
   public ElemAST F() throws AnalSyntException {
 
     Terminal token = tokens.get(pointer);
@@ -83,26 +105,22 @@ public class DescenteRecursive {
     if (token.getType() == TerminalType.NOMBRE || token.getType() == TerminalType.VARIABLE) {
       n = new FeuilleAST(token);
       pointer++;
-    }
-    else if (token.getType() == TerminalType.PARENTHESE && token.getChaine().equals("(")) {
+    } else if (token.getType() == TerminalType.PARENTHESE && token.getChaine().equals("(")) {
       pointer++;
       n = E();
       token = tokens.get(++pointer);
       if (token.getType() == TerminalType.PARENTHESE && token.getChaine().equals(")")) {
         token = tokens.get(++pointer);
       }
+    } else {
+      ErreurSynt("Erreur de syntaxe au token " + pointer + ", un opérateur ou un opérande se situe au mauvais endroit" +
+          ".");
     }
-    else {
-      ErreurSynt("Erreur de syntaxe au token " + pointer + ", un opérateur ou un opérande se situe au mauvais endroit." );
-    }
-    if(token.getType() == TerminalType.END) {
+    if (token.getType() == TerminalType.END) {
       throw new AnalSyntException("Erreur de syntaxe au token " + pointer + ", Les parenthèses ne sont pas en pairs.");
     }
     return n;
   }
-// Methode pour chaque symbole non-terminal de la grammaire retenue
-// ... 
-// ...
 
   /**
    * ErreurSynt() envoie un message d'erreur syntaxique
