@@ -113,11 +113,10 @@ public class DescenteRecursive {
         token = tokens.get(++pointer);
       }
     } else {
-      ErreurSynt("Erreur de syntaxe au token " + pointer + ", un opérateur ou un opérande se situe au mauvais endroit" +
-          ".");
+      ErreurSynt("Erreur : " + chaine + ", erreur de syntaxe au token " + pointer + " "  + token + ". Un Nombre ou une variable est attendu.");
     }
     if (token.getType() == TerminalType.END) {
-      throw new AnalSyntException("Erreur de syntaxe au token " + pointer + ", Les parenthèses ne sont pas en pairs.");
+      throw new AnalSyntException("\"Erreur : " + chaine + ", erreur de syntaxe au token " + pointer + ", Les parenthèses ne sont pas en pairs.");
     }
     return n;
   }

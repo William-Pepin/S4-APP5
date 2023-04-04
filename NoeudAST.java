@@ -56,7 +56,7 @@ public class NoeudAST extends ElemAST {
   /** Lecture PostFix de noeud d'AST
    */
   public String PostFix() {
-    return  getGauche().PostFix() + getDroite().PostFix() + terminal.getChaine();
+    return  getGauche().PostFix() + " " + getDroite().PostFix() + " " + terminal.getChaine();
   }
 
   public ElemAST getDroite() {

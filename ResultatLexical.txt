@@ -1,9 +1,9 @@
-(
-X_a
-+
-Y_b
-)
-*
-Z_c
-/
-59
+[ Token: (, Type: PARENTHESE ]
+[ Token: X_a, Type: VARIABLE ]
+[ Token: +, Type: OPERATEUR ]
+[ Token: Y_b, Type: VARIABLE ]
+[ Token: ), Type: PARENTHESE ]
+[ Token: *, Type: OPERATEUR ]
+[ Token: Z_c, Type: VARIABLE ]
+[ Token: /, Type: OPERATEUR ]
+[ Token: 2, Type: NOMBRE ]

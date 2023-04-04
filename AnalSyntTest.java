@@ -11,14 +11,14 @@ public class AnalSyntTest {
   // Y_b = 10
   // Z_c = 2
   private final String Case1 = "(X_a + Y_b) * Z_c / 2"; // 19
-  private final String Case1PostFix = "X_aY_b+Z_c2/*";
+  private final String Case1PostFix = "X_a Y_b + Z_c 2 / *";
   private final String Case1Lecture = "( ( X_a+Y_b )*( Z_c/2 ) )";
   private final String Case2 = "(X_a + Y_b / Z_c + 59) - 4"; // 69
-  private final String Case2PostFix = "X_aY_bZ_c/59++4-";
+  private final String Case2PostFix = "X_a Y_b Z_c / 59 + + 4 -";
 
   private final String Case2Lecture = "( ( X_a+( ( Y_b/Z_c )+59 ) )-4 )";
   private final String Case3 = "4 * 4 * 4 + 12 / 12"; // 65
-  private final String Case3PostFix = "444**1212/+";
+  private final String Case3PostFix = "4 4 4 * * 12 12 / +";
 
   private final String Case3Lecture = "( ( 4*( 4*4 ) )+( 12/12 ) )";
   private final String parentheseOuvranteTrop = "((4+4)";
@@ -257,6 +257,24 @@ public class AnalSyntTest {
   @org.junit.jupiter.api.Test
   void AnalSyntTestSyntaxeOperateurFini() {
     String stringToTest = operateurFini;
+    System.out.println("Tests du cas suivant : " + stringToTest);
+    System.out.print("\nRésultats : ");
+    DescenteRecursive subject = new DescenteRecursive(stringToTest, true);
+    try {
+      subject.AnalSynt();
+    } catch (AnalSyntException expected) {
+      assertTrue(true);
+      System.out.println(expected);
+      return;
+    } catch (AnalLexException e) {
+      fail();
+    }
+    fail();
+  }
+
+  @org.junit.jupiter.api.Test
+  void AnalSyntTestSyntaxeManqueVariable() {
+    String stringToTest = "(X_a + ) * Z_c / 2";
     System.out.println("Tests du cas suivant : " + stringToTest);
     System.out.print("\nRésultats : ");
     DescenteRecursive subject = new DescenteRecursive(stringToTest, true);

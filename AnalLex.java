@@ -183,9 +183,9 @@ public class AnalLex {
               terminal.append(current);
             } else {
               if (lowerCase.contains(current)) {
-                ErreurLex("La variable à la position " + pointer + " débute par une minuscule. Remplacer " + current + " par " + Character.toUpperCase(current) + ".");
+                ErreurLex("ERREUR : " + chaine + ", la variable à la position " + pointer + " débute par une minuscule. Remplacer " + current + " par " + Character.toUpperCase(current) + ".");
               }
-              ErreurLex("Le caractère " + current + " n'est pas un caractère connu du compilateur.");
+              ErreurLex("ERREUR : " + chaine + ", le caractère " + current + " n'est pas un caractère connu du compilateur.");
             }
           }
 
@@ -219,10 +219,10 @@ public class AnalLex {
               terminal.append(current);
             } else {
               if (current == '_') {
-                ErreurLex("Caractère invalide à la position " + pointer + ", la variable contient deux tirets bas de " +
+                ErreurLex("ERREUR : " + chaine + ", caractère invalide à la position " + pointer + ", la variable contient deux tirets bas de " +
                     "suite.");
               }
-              ErreurLex("Caractère invalide à la position " + pointer + ", la variable précédente termine par \"_\", " +
+              ErreurLex("ERREUR : " + chaine + ", caractère invalide à la position " + pointer + ", la variable précédente termine par \"_\", " +
                   "ou l'élément " + current + " ne fait pas partie des caractères connu du compilateur.");
             }
           }
@@ -290,7 +290,7 @@ public class AnalLex {
     Terminal t = null;
     while (lexical.resteTerminal()) {
       t = lexical.prochainTerminal();
-      toWrite += t.getChaine() + "\n";  // toWrite contient le resultat
+      toWrite += t.toString() + "\n";  // toWrite contient le resultat
     }           //    d'analyse lexicale
     System.out.println(toWrite);   // Ecriture de toWrite sur la console
     Writer w = new Writer(args[1], toWrite); // Ecriture de toWrite dans fichier args[1]
