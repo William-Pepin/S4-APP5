@@ -16,15 +16,16 @@ public class NoeudAST extends ElemAST {
 
   /** Constructeur pour l'initialisation d'attributs
    */
-  public NoeudAST(Terminal terminal, ElemAST pG, ElemAST pD) throws Exception { // avec arguments
-    if (terminal.getType() != TerminalType.OPERATEUR ||
-        terminal.getType() != TerminalType.PARENTHESE) {
-      throw new Exception("a changer eventuellement...");
+  public NoeudAST(Terminal terminal, ElemAST pG, ElemAST pD) throws AnalSyntException {
+      if (terminal.getType() == TerminalType.OPERATEUR) {
+        this.terminal = terminal;
+        this.gauche = pG;
+        this.droite = pD;
+      }
+      else
+        throw new AnalSyntException("a changer eventuellement....");
     }
-    this.terminal = terminal;
-    this.gauche = pG;
-    this.droite = pD;
-  }
+
 
 
   /** Evaluation de noeud d'AST

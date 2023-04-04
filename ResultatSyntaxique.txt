@@ -1,0 +1,2 @@
+Lecture de l'AST trouve : ( ( [ Token: X_a, Type: VARIABLE ]+[ Token: Y_b, Type: VARIABLE ] )*( [ Token: Z_c, Type: VARIABLE ]/[ Token: 59, Type: NOMBRE ] ) )
+Evaluation de l'AST trouve : 0

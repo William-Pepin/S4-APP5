@@ -7,5 +7,6 @@ public enum TerminalType {
   OPERATEUR,
   PARENTHESE,
   NOMBRE,
-  VARIABLE
+  VARIABLE,
+  END
 }

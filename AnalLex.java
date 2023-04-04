@@ -232,6 +232,13 @@ public class AnalLex {
       }
       pointer++;
     }
+    switch (state)
+    {
+      case VAR ->
+      type = TerminalType.VARIABLE;
+      case NUMBER -> type = TerminalType.NOMBRE;
+      case INIT, VAR_ER -> type = null;
+    }
     return new Terminal(terminal.toString(), type);
   }
 
